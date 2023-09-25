@@ -1,11 +1,28 @@
 package com.safetynet.SafetyNetAlerts.util;
 
-import jakarta.annotation.PostConstruct;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safetynet.SafetyNetAlerts.model.Root;
+import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+@Component
 public class DataLoader {
-    @PostConstruct // Cette annotation assure que cette méthode est exécutée au démarrage de l'application
-    public void loadData() {
-        // Lire le fichier JSON depuis 'src/main/resources'
-        // Peupler la base de données
+
+    private Root root;
+
+    public DataLoader() {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try (InputStream is = getClass().getResourceAsStream("/data.json")) {
+            this.root = mapper.readValue(is, Root.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Root getRoot() {
+        return root;
     }
 }
