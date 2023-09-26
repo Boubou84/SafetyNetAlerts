@@ -27,5 +27,10 @@ public class PersonController {
     public List<Person> getAllPeople() {
         return personService.getPeople();
     }
+
+    @GetMapping("/communityEmail")
+    public List<String> getCommunityEmail(@RequestParam String city) {
+        return personService.getEmailsByCity(city);
+    }
 }
 

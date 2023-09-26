@@ -37,6 +37,13 @@ public class PersonRepository {
                 .collect(Collectors.toList());
     }
 
+    public List<Person> findByCity(String city) {
+        return people.stream()
+                .filter(p -> p.getCity().equals(city))
+                .collect(Collectors.toList());
+    }
+
+
     public List<Person> findAll() {
         return people;
     }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
@@ -40,5 +41,12 @@ public class PersonService {
         personInfo.setMedicalRecord(medicalRecord);
 
         return personInfo;
+    }
+
+    public List<String> getEmailsByCity(String city) {
+        List<Person> personsInCity = personRepository.findByCity(city);
+        return personsInCity.stream()
+                .map(Person::getEmail)
+                .collect(Collectors.toList());
     }
 }
