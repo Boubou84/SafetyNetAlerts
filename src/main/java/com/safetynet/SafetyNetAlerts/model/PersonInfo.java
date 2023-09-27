@@ -3,6 +3,7 @@ package com.safetynet.SafetyNetAlerts.model;
 public class PersonInfo {
 
     private Person person;
+    private int age;
     private MedicalRecord medicalRecord;
 
     public PersonInfo() {
@@ -11,6 +12,8 @@ public class PersonInfo {
     public PersonInfo(Person person, MedicalRecord medicalRecord) {
         this.person = person;
         this.medicalRecord = medicalRecord;
+        this.age = age;
+
     }
 
     public Person getPerson() {
@@ -27,5 +30,13 @@ public class PersonInfo {
 
     public void setMedicalRecord(MedicalRecord medicalRecord) {
         this.medicalRecord = medicalRecord;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

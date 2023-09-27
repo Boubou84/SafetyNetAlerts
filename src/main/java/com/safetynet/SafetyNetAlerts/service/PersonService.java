@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.safetynet.SafetyNetAlerts.util.AgeUtil.calculateAge;
+
 @Service
 public class PersonService {
 
@@ -39,6 +41,7 @@ public class PersonService {
         PersonInfo personInfo = new PersonInfo();
         personInfo.setPerson(person);
         personInfo.setMedicalRecord(medicalRecord);
+        personInfo.setAge(calculateAge(medicalRecord.getBirthdate()));
 
         return personInfo;
     }

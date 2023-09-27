@@ -43,6 +43,11 @@ public class PersonRepository {
                 .collect(Collectors.toList());
     }
 
+    public List<Person> findByAddress(String address) {
+        return people.stream()
+                .filter(p -> p.getAddress().equals(address))
+                .collect(Collectors.toList());
+    }
 
     public List<Person> findAll() {
         return people;
