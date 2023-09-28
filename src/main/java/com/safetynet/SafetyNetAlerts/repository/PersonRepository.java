@@ -21,6 +21,8 @@ public class PersonRepository {
     @Autowired
     public PersonRepository(DataLoader dataLoader) {
         this.people = dataLoader.getRoot().getPersons();
+        this.firestations = dataLoader.getRoot().getFirestations();
+
     }
 
     public Optional<Person> findByFirstNameAndLastName(String firstName, String lastName) {
@@ -48,6 +50,30 @@ public class PersonRepository {
                 .filter(p -> p.getAddress().equals(address))
                 .collect(Collectors.toList());
     }
+    public List<Person> findAllByAddresses(List<String> addresses) {
+        return people.stream()
+                .filter(person -> addresses.stream()
+                        .anyMatch(address -> address.equalsIgnoreCase(person.getAddress())))
+                .collect(Collectors.toList());
+    }
+
+    private FireStation findFireStationByAddress(String address) {
+        return firestations.stream()
+                .filter(fs -> fs.getAddress().equalsIgnoreCase(address))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public List<Person> findPersonsByStationNumber(int stationNumber) {
+        String stationNumberAsString = String.valueOf(stationNumber);
+
+        return people.stream()
+                .filter(person -> {
+                    FireStation fireStation = findFireStationByAddress(person.getAddress());
+                    return fireStation != null && stationNumberAsString.equals(fireStation.getStation());
+                })
+                .collect(Collectors.toList());
+    }
 
     public List<Person> findAll() {
         return people;
@@ -60,4 +86,5 @@ public class PersonRepository {
     public List<MedicalRecord> findAllMedicalRecords() {
         return medicalrecords;
     }
+
 }

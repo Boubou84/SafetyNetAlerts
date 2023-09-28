@@ -1,5 +1,8 @@
 package com.safetynet.SafetyNetAlerts.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -7,9 +10,12 @@ import java.time.format.DateTimeParseException;
 
 public class AgeUtil {
 
+    private static final Logger logger = LoggerFactory.getLogger(AgeUtil.class);
+
     private static final DateTimeFormatter[] FORMATTERS = new DateTimeFormatter[]{
             DateTimeFormatter.ofPattern("MM/dd/yyyy"),
             DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd")
     };
 
     public static int calculateAge(String birthdate) {
@@ -21,7 +27,7 @@ public class AgeUtil {
             }
         }
 
-        System.err.println("Erreur de format de date, aucun format n'a réussi à parser la date: " + birthdate);
+        logger.error("Erreur de format de date, aucun format n'a réussi la conversion de la date: {}", birthdate);
         return -1;
     }
 }

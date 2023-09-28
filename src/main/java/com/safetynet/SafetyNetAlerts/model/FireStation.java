@@ -27,4 +27,14 @@ public class FireStation {
     public void setStation(String station) {
         this.station = station;
     }
+
+    public int getStationNumber() {
+        try {
+            return Integer.parseInt(station);
+        } catch (NumberFormatException e) {
+            System.err.println("Erreur lors de la conversion du numéro de station en int : " + station);
+            return -1;
+        }
+    }
+
 }
