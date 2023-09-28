@@ -2,6 +2,11 @@ package com.safetynet.SafetyNetAlerts.model;
 
 import java.util.List;
 
+/**
+ * Modèle de base pour le chargement des données JSON.
+ * Contient des listes de personnes, de dossiers médicaux et de stations de pompiers.
+ */
+
 public class Root {
     private List<Person> persons;
     private List<FireStation> firestations;

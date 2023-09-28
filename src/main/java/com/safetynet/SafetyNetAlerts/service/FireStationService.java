@@ -21,6 +21,11 @@ import java.util.stream.Collectors;
 
 import static com.safetynet.SafetyNetAlerts.util.AgeUtil.calculateAge;
 
+/**
+ * Service pour gérer les fonctionnalités liées aux stations de pompiers.
+ * Fournit des méthodes pour obtenir des informations sur la zone de couverture et les détails des stations.
+ */
+
 @Service
 public class FireStationService {
 

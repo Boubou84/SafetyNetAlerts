@@ -2,6 +2,11 @@ package com.safetynet.SafetyNetAlerts.DTO;
 
 import java.util.List;
 
+/**
+ * DTO pour transporter des informations sur une résidence.
+ * Contient des détails tels que l'adresse et les informations sur les résidents.
+ */
+
 public class Residence {
     private String address;
     private List<InfoResidents> residents;

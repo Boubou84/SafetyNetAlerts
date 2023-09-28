@@ -2,6 +2,11 @@ package com.safetynet.SafetyNetAlerts.DTO;
 
 import java.util.List;
 
+/**
+ * DTO pour transporter les informations sur la couverture d'une station de pompiers.
+ * Inclut des informations sur les personnes couvertes, ainsi que le nombre d'adultes et d'enfants.
+ */
+
 public class FireStationCoverageDTO {
     private List<PersonFireStationDTO> persons;
     private int adultCount;

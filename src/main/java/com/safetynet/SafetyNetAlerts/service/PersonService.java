@@ -13,6 +13,11 @@ import java.util.stream.Collectors;
 
 import static com.safetynet.SafetyNetAlerts.util.AgeUtil.calculateAge;
 
+/**
+ * Service pour gérer les fonctionnalités liées aux personnes.
+ * Fournit des méthodes pour obtenir et manipuler des informations sur les personnes.
+ */
+
 @Service
 public class PersonService {
 

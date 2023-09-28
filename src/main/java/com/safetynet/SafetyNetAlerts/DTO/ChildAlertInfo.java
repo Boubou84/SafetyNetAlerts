@@ -1,5 +1,10 @@
 package com.safetynet.SafetyNetAlerts.DTO;
 
+/**
+ * DTO pour transporter les données des alertes d'enfants.
+ * Contient des informations détaillées sur les enfants.
+ */
+
 public class ChildAlertInfo {
     private String firstName;
     private String lastName;

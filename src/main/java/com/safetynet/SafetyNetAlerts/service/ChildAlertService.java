@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service pour gérer les fonctionnalités liées aux alertes d'enfants.
+ * Fournit des méthodes pour récupérer des informations sur les enfants en cas d'urgence.
+ */
+
 @Service
 public class ChildAlertService {
 

@@ -1,5 +1,10 @@
 package com.safetynet.SafetyNetAlerts.model;
 
+/**
+ * Modèle pour représenter une personne.
+ * Contient des informations de base sur une personne, son nom, son adresse, son téléphone, etc.
+ */
+
 public class Person {
     private String firstName;
     private String lastName;

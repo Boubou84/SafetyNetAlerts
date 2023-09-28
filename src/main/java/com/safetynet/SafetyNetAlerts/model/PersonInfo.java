@@ -1,5 +1,10 @@
 package com.safetynet.SafetyNetAlerts.model;
 
+/**
+ * Modèle pour contenir des informations détaillées sur une personne.
+ * Inclut des détails supplémentaires qui ne sont pas inclus dans le modèle Person de base.
+ */
+
 public class PersonInfo {
 
     private Person person;

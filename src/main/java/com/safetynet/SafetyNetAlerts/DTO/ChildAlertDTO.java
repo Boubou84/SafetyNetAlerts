@@ -2,6 +2,11 @@ package com.safetynet.SafetyNetAlerts.DTO;
 
 import java.util.List;
 
+/**
+ * DTO pour transporter les données des alertes d'enfants.
+ * Contient des informations détaillées sur les enfants et les membres du ménage.
+ */
+
 public class ChildAlertDTO {
     private List<ChildAlertInfo> children;
     private List<String> householdMembers;

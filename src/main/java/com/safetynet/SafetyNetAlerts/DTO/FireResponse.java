@@ -2,6 +2,11 @@ package com.safetynet.SafetyNetAlerts.DTO;
 
 import java.util.List;
 
+/**
+ * DTO pour transporter les données des réponses aux incendies.
+ * Contient des informations sur les personnes vivant à une adresse spécifique et leur station de pompiers associée.
+ */
+
     public class FireResponse {
         private List<PersonDetails> persons;
         private Integer stationNumber;

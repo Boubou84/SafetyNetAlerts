@@ -1,5 +1,10 @@
 package com.safetynet.SafetyNetAlerts.model;
 
+/**
+ * Modèle pour représenter une station de pompiers.
+ * Contient des informations sur l'adresse et le numéro de la station.
+ */
+
 public class FireStation {
     private String address;
     private String station;

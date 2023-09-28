@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Contrôleur pour gérer les requêtes HTTP liées aux stations de pompiers.
+ * Il propose des endpoints pour obtenir des informations sur les personnes couvertes par une station spécifique.
+ */
+
 @RestController
 @RequestMapping("/firestation")
 public class FireStationController {

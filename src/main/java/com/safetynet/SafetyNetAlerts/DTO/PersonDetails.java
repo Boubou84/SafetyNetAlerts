@@ -2,6 +2,11 @@ package com.safetynet.SafetyNetAlerts.DTO;
 
 import java.util.List;
 
+/**
+ * DTO pour transporter des informations détaillées sur une personne.
+ * Utilisé pour afficher des informations spécifiques sur une personne dans les réponses aux requêtes.
+ */
+
 public class PersonDetails {
     private String name;
     private String phone;

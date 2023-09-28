@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service pour gérer les fonctionnalités liées aux alertes téléphoniques.
+ * Fournit des méthodes pour envoyer des alertes et récupérer des numéros de téléphone en cas d'urgence.
+ */
+
 @Service
 public class PhoneAlertService {
 

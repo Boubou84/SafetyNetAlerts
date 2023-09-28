@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Contrôleur gérant les requêtes HTTP relatives aux personnes.
+ * Fournit des endpoints pour accéder et manipuler les données des personnes.
+ */
+
 @RestController
 public class PersonController {
 

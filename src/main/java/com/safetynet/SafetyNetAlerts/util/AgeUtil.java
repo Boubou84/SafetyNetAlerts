@@ -8,6 +8,11 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Classe utilitaire pour gérer les fonctionnalités liées à l'âge.
+ * Fournit des méthodes pour calculer l'âge et d'autres opérations liées à l'âge.
+ */
+
 public class AgeUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(AgeUtil.class);

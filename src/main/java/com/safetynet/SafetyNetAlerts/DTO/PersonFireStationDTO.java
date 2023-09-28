@@ -1,5 +1,10 @@
 package com.safetynet.SafetyNetAlerts.DTO;
 
+/**
+ * DTO pour transporter des informations sur une personne et la station de pompiers associée.
+ * Utilisé dans les réponses pour fournir des détails sur les personnes couvertes par une station spécifique.
+ */
+
 public class PersonFireStationDTO {
     private String firstName;
     private String lastName;

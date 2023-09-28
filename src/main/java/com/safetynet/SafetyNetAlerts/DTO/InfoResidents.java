@@ -2,6 +2,11 @@ package com.safetynet.SafetyNetAlerts.DTO;
 
 import java.util.List;
 
+/**
+ * DTO contenant des informations sur les résidents d'une adresse spécifique.
+ * Utilisé pour les réponses aux requêtes concernant les informations résidentielles.
+ */
+
 public class InfoResidents {
     private String name;
     private String phone;

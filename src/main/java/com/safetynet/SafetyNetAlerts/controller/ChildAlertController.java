@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Contrôleur gérant les requêtes HTTP relatives aux alertes d'enfants.
+ * Il définit des endpoints pour récupérer des informations spécifiques sur les enfants en fonction des paramètres reçus.
+ */
+
 @RestController
 @RequestMapping("/childAlert")
 public class ChildAlertController {

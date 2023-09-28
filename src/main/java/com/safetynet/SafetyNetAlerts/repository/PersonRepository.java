@@ -11,6 +11,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Référentiel pour gérer les opérations liées aux données des personnes.
+ * Fournit des méthodes pour récupérer et manipuler les informations sur les personnes.
+ */
+
 @Repository
 public class PersonRepository {
 

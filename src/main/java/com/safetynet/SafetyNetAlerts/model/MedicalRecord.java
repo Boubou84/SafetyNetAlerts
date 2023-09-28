@@ -2,6 +2,11 @@ package com.safetynet.SafetyNetAlerts.model;
 
 import java.util.List;
 
+/**
+ * Modèle pour représenter un dossier médical.
+ * Contient des informations personnelles et médicales sur une personne.
+ */
+
 public class MedicalRecord {
     private String firstName;
     private String lastName;

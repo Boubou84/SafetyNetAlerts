@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Contrôleur pour gérer les alertes téléphoniques en cas d'urgence.
+ * Fournit un endpoint pour récupérer les numéros de téléphone des résidents desservis par une station spécifique.
+ */
+
 @RestController
 public class PhoneAlertController {
 

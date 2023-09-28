@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Contrôleur pour gérer les requêtes concernant les résidences.
+ * Propose des méthodes pour obtenir des informations sur les résidents et leur domicile.
+ */
+
 @RestController
 @RequestMapping("/flood")
 public class ResidenceController {

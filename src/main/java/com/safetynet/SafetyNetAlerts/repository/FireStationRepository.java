@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Référentiel pour gérer les opérations liées aux données des stations de pompiers.
+ * Fournit des méthodes pour accéder et manipuler les données des stations de pompiers.
+ */
+
 @Repository
 public class FireStationRepository {
 

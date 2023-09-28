@@ -18,6 +18,11 @@ import java.util.stream.Collectors;
 
 import static com.safetynet.SafetyNetAlerts.util.AgeUtil.calculateAge;
 
+/**
+ * Service pour gérer les fonctionnalités liées aux résidences.
+ * Fournit des méthodes pour obtenir des informations sur les résidences et les résidents.
+ */
+
 @Service
 public class ResidenceService {
 
