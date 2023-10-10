@@ -2,6 +2,7 @@ package com.safetynet.Safetynetalerts.repository;
 
 import com.safetynet.Safetynetalerts.model.MedicalRecord;
 import com.safetynet.Safetynetalerts.service.JsonFileService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +21,11 @@ public class MedicalRecordRepository {
 
     @Autowired
     private JsonFileService jsonFileService;
+
+    @PostConstruct
+    public void init() {
+        medicalRecords = jsonFileService.getMedicalRecords();
+    }
 
     @Autowired
     public MedicalRecordRepository(JsonFileService jsonFileService) {

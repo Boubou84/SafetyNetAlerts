@@ -11,6 +11,8 @@ import com.safetynet.Safetynetalerts.repository.FireStationRepository;
 import com.safetynet.Safetynetalerts.repository.MedicalRecordRepository;
 import com.safetynet.Safetynetalerts.repository.PersonRepository;
 import com.safetynet.Safetynetalerts.util.AgeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,12 @@ public class FireStationService {
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
 
+    @Autowired
+    JsonFileService jsonFileService;
+
+    private final Logger logger = LoggerFactory.getLogger(FireStationService.class);
+
+
     public FireResponse getFireDetailsByAddress(String address) {
         if (address == null || address.trim().isEmpty()) {
             throw new IllegalArgumentException("L'adresse ne peut pas être nulle ou vide");
@@ -62,32 +70,40 @@ public class FireStationService {
         FireResponse response = new FireResponse();
         response.setPersons(personDetailsList);
         fireStation.ifPresent(fs -> response.setStation(fs.getStation()));
+        logger.info("Détails de l'incendie récupérés avec succès pour l'adresse {}", address);
         return response;
     }
 
-    public FireStationCoverageDTO getPersonsCoveredByStation(int station) {
-        List<Person> persons = personRepository.findPersonsByStationNumber(station);
+    public FireStationCoverageDTO getPersonsCoveredByStation(int stationNumber) {
+        List<FireStation> fireStations = jsonFileService.getFireStations().stream()
+                .filter(fs -> fs.getStation() == stationNumber)
+                .collect(Collectors.toList());
 
-        List<PersonFireStationDTO> personsDTO = new ArrayList<>();
-        int adults = 0;
-        int children = 0;
-
-        for (Person person : persons) {
-            MedicalRecord medicalRecord = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName()).orElse(null);
-
-            if (medicalRecord != null) {
-                int age = AgeUtil.calculateAge(medicalRecord.getBirthdate());
-                personsDTO.add(new PersonFireStationDTO(person.getFirstName(), person.getLastName(), person.getAddress(), person.getPhone()));
-
-                if (age > 18) {
-                    adults++;
-                } else {
-                    children++;
-                }
-            }
+        if (fireStations.isEmpty()) {
+            return new FireStationCoverageDTO(new ArrayList<>(), 0, 0);
         }
 
-        return new FireStationCoverageDTO(personsDTO, adults, children);
-    }
+        List<String> addresses = fireStations.stream()
+                .map(FireStation::getAddress)
+                .collect(Collectors.toList());
 
+        List<Person> persons = jsonFileService.getPersons().stream()
+                .filter(p -> addresses.contains(p.getAddress()))
+                .collect(Collectors.toList());
+
+        List<PersonFireStationDTO> personDTOs = persons.stream()
+                .map(p -> new PersonFireStationDTO(p.getFirstName(), p.getLastName(), p.getAddress(), p.getPhone()))
+                .collect(Collectors.toList());
+
+        long adultsCount = persons.stream()
+                .filter(p -> {
+                    MedicalRecord medicalRecord = medicalRecordRepository.findByFirstNameAndLastName(p.getFirstName(), p.getLastName()).orElse(null);
+                    return medicalRecord != null && AgeUtil.calculateAge(medicalRecord.getBirthdate()) > 18;
+                })
+                .count();
+
+        long childrenCount = persons.size() - adultsCount;
+
+        return new FireStationCoverageDTO(personDTOs, (int) adultsCount, (int) childrenCount);
+    }
 }
