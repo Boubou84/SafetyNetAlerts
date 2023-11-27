@@ -2,7 +2,6 @@ package com.safetynet.safetynetalerts.controller;
 
 import com.safetynet.safetynetalerts.model.MedicalRecord;
 import com.safetynet.safetynetalerts.service.MedicalRecordService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/medicalRecord")
 public class MedicalRecordController {
 
-    @Autowired
-    private MedicalRecordService medicalRecordService;
+    private final MedicalRecordService medicalRecordService;
+
+    public MedicalRecordController(MedicalRecordService medicalRecordService) {
+        this.medicalRecordService = medicalRecordService;
+    }
 
     @PostMapping
     public ResponseEntity<MedicalRecord> addMedicalRecord(@RequestBody MedicalRecord medicalRecord) {

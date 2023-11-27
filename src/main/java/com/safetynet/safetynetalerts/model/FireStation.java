@@ -10,6 +10,7 @@ import lombok.ToString;
  * Modèle pour représenter une station de pompiers.
  * Contient des informations sur l'adresse et la station.
  */
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
 public class FireStation {
@@ -26,6 +27,7 @@ public class FireStation {
 
     public FireStation(String address, int station) {
         this.address = address;
+        this.station = station;
     }
 
     public String getAddress() {
@@ -43,5 +45,4 @@ public class FireStation {
     public void setStation(int station) {
         this.station = station;
     }
-
 }

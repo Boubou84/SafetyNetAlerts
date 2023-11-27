@@ -9,8 +9,6 @@ import java.io.IOException;
 public interface IFireStationService {
     FireResponse getFireDetailsByAddress(String address);
 
-    FireStationCoverageDTO getFireStationCoverage(int stationNumber) throws IOException;
-
     FireStationCoverageDTO getPersonsCoveredByStation(int stationNumber) throws IOException;
 
     FireStation addFireStation(FireStation fireStation);

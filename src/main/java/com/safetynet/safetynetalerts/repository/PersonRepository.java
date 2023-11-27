@@ -1,22 +1,19 @@
 package com.safetynet.safetynetalerts.repository;
 
+import com.safetynet.safetynetalerts.exception.NotFoundException;
 import com.safetynet.safetynetalerts.interfaces.PersonInfoProvider;
 import com.safetynet.safetynetalerts.model.FireStation;
 import com.safetynet.safetynetalerts.model.MedicalRecord;
 import com.safetynet.safetynetalerts.model.Person;
 import com.safetynet.safetynetalerts.model.Root;
-import com.safetynet.safetynetalerts.service.PersonInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class PersonRepository implements PersonInfoProvider {
@@ -24,19 +21,13 @@ public class PersonRepository implements PersonInfoProvider {
     private static final Logger logger = LoggerFactory.getLogger(PersonRepository.class);
     private List<Person> persons;
 
-    private PersonInfoService personInfoService;
-    private RootRepository rootRepository;
-    private FireStationRepository fireStationRepository;
-    private  PersonRepository personRepository;
+    private final RootRepository rootRepository;
+    private final FireStationRepository fireStationRepository;
 
-    @Autowired
-    @Lazy
-    public PersonRepository(PersonInfoService personInfoService, RootRepository rootRepository, FireStationRepository fireStationRepository, PersonRepository personRepository) throws IOException {
-        this.personInfoService = personInfoService;
-        this.rootRepository = rootRepository;
+    public PersonRepository(RootRepository rootRepository, FireStationRepository fireStationRepository) throws IOException {
         this.persons = rootRepository.getRoot().getPersons();
+        this.rootRepository = rootRepository;
         this.fireStationRepository = fireStationRepository;
-        this.personRepository = personRepository;
     }
 
     public Optional<Person> findByFirstNameAndLastName(String firstName, String lastName) {
@@ -53,7 +44,7 @@ public class PersonRepository implements PersonInfoProvider {
     public List<Person> findByAddress(String address) {
         return persons.stream()
                 .filter(p -> p.getAddress().equalsIgnoreCase(address))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Person> findPersonsByStationNumber(int stationNumber) throws IOException {
@@ -69,17 +60,15 @@ public class PersonRepository implements PersonInfoProvider {
         }
 
         // Récupérer toutes les personnes qui vivent à ces adresses
-        List<Person> persons = personRepository.findAllByAddresses(addresses).stream()
+        return findAllByAddresses(addresses).stream()
                 .filter(person -> addresses.contains(person.getAddress()))
-                .collect(Collectors.toList());
-
-        return persons;
+                .toList();
     }
 
     public List<Person> findAllByAddresses(List<String> addresses) throws IOException {
         return rootRepository.getRoot().getPersons().stream()
                 .filter(p -> addresses.contains(p.getAddress()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Person> findPersons(String firstName, String lastName, String city, String address) {
@@ -88,7 +77,7 @@ public class PersonRepository implements PersonInfoProvider {
                 .filter(p -> lastName == null || p.getLastName().equalsIgnoreCase(lastName))
                 .filter(p -> city == null || p.getCity().equalsIgnoreCase(city))
                 .filter(p -> address == null || p.getAddress().equalsIgnoreCase(address))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public Person addPerson(Person newPerson) throws IOException {
@@ -96,55 +85,36 @@ public class PersonRepository implements PersonInfoProvider {
         List<Person> persons = root.getPersons();
         persons.add(newPerson);
         rootRepository.write(root);
+        rootRepository.reloadData();
         return newPerson;
     }
 
-    private boolean personExists(Person person) {
-        return persons.stream().anyMatch(p -> p.getFirstName().equals(person.getFirstName())
-                && p.getLastName().equals(person.getLastName()));
-    }
+    public Person updatePerson(String oldFirstName, String oldLastName, Person updatedPerson) throws IOException {
+        Optional<Person> existingPersonOpt = findByFirstNameAndLastName(oldFirstName, oldLastName);
 
-    public void updateJsonFile() {
-        try {
+        if (existingPersonOpt.isPresent()) {
+            Person existingPerson = existingPersonOpt.get();
+
+            existingPerson.setAddress(updatedPerson.getAddress());
+            existingPerson.setCity(updatedPerson.getCity());
+            existingPerson.setZip(updatedPerson.getZip());
+            existingPerson.setPhone(updatedPerson.getPhone());
+            existingPerson.setEmail(updatedPerson.getEmail());
+
             Root root = rootRepository.getRoot();
             root.setPersons(persons);
             rootRepository.write(root);
-        } catch (IOException e) {
-            logger.error("Erreur lors de la mise à jour du fichier JSON", e);
-            throw new RuntimeException("Erreur lors de la mise à jour du fichier JSON", e);
-        }
-    }
-
-
-    @Override
-    public Person updatePerson(Person person, MedicalRecord medicalRecord, FireStation fireStation) {
-        return person;
-    }
-
-    @Override
-    public Person updatePerson(Person person) throws IOException {
-        return addPerson(person);
-    }
-
-    public Person updatePerson(String oldFirstName, String oldLastName, Person updatedPerson) {
-        Optional<Person> existingPerson = persons.stream()
-                .filter(p -> p.getFirstName().equalsIgnoreCase(oldFirstName)
-                        && p.getLastName().equalsIgnoreCase(oldLastName))
-                .findFirst();
-
-        if (existingPerson.isPresent()) {
-            int index = persons.indexOf(existingPerson.get());
-            persons.set(index, updatedPerson);
-            updateJsonFile();
-            return updatedPerson;
+            // Rechargement des données pour synchroniser les modifications.
+            rootRepository.reloadData();
+            return existingPerson;
         } else {
-            throw new IllegalArgumentException("La personne n'existe pas");
+            throw new NotFoundException("La personne avec le prénom " + oldFirstName + " et le nom " + oldLastName + " n'existe pas");
         }
     }
 
     @Override
     public List<Person> getPersons() {
-        return null;
+        return Collections.emptyList();
     }
 
     public boolean deletePerson(String firstName, String lastName) throws IOException {
@@ -159,13 +129,11 @@ public class PersonRepository implements PersonInfoProvider {
                 p.getFirstName().equals(firstName) && p.getLastName().equals(lastName));
 
         if (isRemoved) {
-            updateJsonFile();
+            rootRepository.write(root);
+            rootRepository.reloadData();
         }
-        return isRemoved;
-    }
 
-    public List<Person> getListPersons() {
-        return persons;
+        return isRemoved;
     }
 
     @Override
@@ -178,13 +146,8 @@ public class PersonRepository implements PersonInfoProvider {
         return rootRepository.getRoot().getMedicalRecords();
     }
 
-    @Override
-    public void updateJsonFile(List<Person> persons, List<FireStation> fireStations, List<MedicalRecord> medicalRecords) {
-
+    public void refreshData(List<Person> updatedPersons) {
+        this.persons = updatedPersons;
     }
 
-    @Override
-    public void updateJsonFile(List<Person> persons) {
-
-    }
 }

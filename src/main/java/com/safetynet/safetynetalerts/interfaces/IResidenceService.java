@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IResidenceService {
-    Residence getResidenceInfo(String address);
 
     List<Residence> getResidencesByStations(List<Integer> stationNumbers) throws IOException;
 

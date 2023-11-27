@@ -1,12 +1,12 @@
 package com.safetynet.safetynetalerts.repository;
 
+import com.safetynet.safetynetalerts.exception.NotFoundException;
 import com.safetynet.safetynetalerts.model.MedicalRecord;
 import com.safetynet.safetynetalerts.model.Root;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import jakarta.annotation.PostConstruct;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,23 +22,23 @@ public class MedicalRecordRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(MedicalRecordRepository.class);
 
-    private RootRepository rootRepository;
+    private final RootRepository rootRepository;
 
     private List<MedicalRecord> medicalrecords;
-    @Autowired
-    public MedicalRecordRepository(RootRepository rootRepository, List<MedicalRecord> medicalrecords) {
+
+    public MedicalRecordRepository(RootRepository rootRepository, List<MedicalRecord> medicalrecords) throws IOException {
         this.rootRepository = rootRepository;
         this.medicalrecords = medicalrecords;
         initializeMedicalRecords();
     }
 
     @PostConstruct
-    public void initializeMedicalRecords() {
-        try {
-            Root root = rootRepository.getRoot();
+    public void initializeMedicalRecords() throws IOException {
+        Root root = rootRepository.getRoot();
+        if (root != null) {
             this.medicalrecords = root.getMedicalRecords();
-        } catch (IOException e) {
-            logger.error("Erreur lors de la récupération des dossiers médicaux", e);
+        } else {
+            throw new NotFoundException("L'objet Root n'a pas pu être récupéré.");
         }
     }
 
@@ -53,9 +53,9 @@ public class MedicalRecordRepository {
     }
 
     public void addMedicalRecord(MedicalRecord medicalRecord) {
-        if (medicalRecord == null) {
+        if (medicalRecord == null || medicalRecord.getFirstName().trim().isEmpty() || medicalRecord.getLastName().trim().isEmpty()) {
             logger.error("La tentative d'ajout d'un dossier médical nul a été détectée");
-            throw new IllegalArgumentException("Le dossier médical ne peut pas être null");
+            throw new NotFoundException("Le dossier médical ne peut pas être null ou vide !");
         }
 
         medicalrecords.add(medicalRecord);
@@ -71,7 +71,7 @@ public class MedicalRecordRepository {
             updateRoot();
             logger.info("Dossier médical mis à jour avec succès : {}", medicalRecord);
         } else {
-            throw new IllegalArgumentException("Le dossier médical n'existe pas");
+            throw new NotFoundException("Le dossier médical n'existe pas");
         }
     }
 
@@ -83,7 +83,7 @@ public class MedicalRecordRepository {
             updateRoot();
             logger.info("Dossier médical supprimé avec succès pour : {} {}", firstName, lastName);
         } else {
-            throw new IllegalArgumentException("Le dossier médical n'existe pas");
+            throw new NotFoundException("Le dossier médical n'existe pas");
         }
     }
 

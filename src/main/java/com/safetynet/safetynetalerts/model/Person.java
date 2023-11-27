@@ -5,12 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.ToString;
 
-import java.util.Objects;
-
 /**
  * Modèle pour représenter une personne.
  * Contient des informations de base sur une personne, son nom, son adresse, son téléphone, etc.
  */
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
 public class Person {
@@ -110,26 +109,5 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-
-        Person person = (Person) obj;
-
-        return Objects.equals(firstName, person.firstName) &&
-                Objects.equals(lastName, person.lastName);
     }
 }

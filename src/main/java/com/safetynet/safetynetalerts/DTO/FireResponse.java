@@ -9,6 +9,7 @@ import java.util.List;
 
     public class FireResponse {
         private List<PersonDetails> persons;
+
         private Integer station;
 
         public FireResponse() {
@@ -34,5 +35,5 @@ import java.util.List;
         public void setStation(Integer station) {
             this.station = station;
         }
-    }
+}
 

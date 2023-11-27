@@ -6,8 +6,6 @@ import com.safetynet.safetynetalerts.interfaces.IFireStationService;
 import com.safetynet.safetynetalerts.model.FireStation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +17,12 @@ import java.io.IOException;
 public class FireStationController {
 
     private final Logger logger = LoggerFactory.getLogger(FireStationController.class);
-    @Autowired
-    @Lazy
-    private IFireStationService fireStationService;
+
+    private final IFireStationService fireStationService;
+
+    public FireStationController(IFireStationService fireStationService) {
+        this.fireStationService = fireStationService;
+    }
 
     @GetMapping("/fire")
     public FireResponse getFireDetailsByAddress(@RequestParam String address) {
@@ -59,5 +60,4 @@ public class FireStationController {
         fireStationService.deleteFireStation(address);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

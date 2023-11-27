@@ -2,13 +2,13 @@ package com.safetynet.safetynetalerts.service;
 
 import com.safetynet.safetynetalerts.DTO.ChildAlertDTO;
 import com.safetynet.safetynetalerts.DTO.ChildAlertInfo;
+import com.safetynet.safetynetalerts.exception.NotFoundException;
 import com.safetynet.safetynetalerts.interfaces.IChildAlertService;
 import com.safetynet.safetynetalerts.model.MedicalRecord;
 import com.safetynet.safetynetalerts.model.Person;
 import com.safetynet.safetynetalerts.repository.MedicalRecordRepository;
 import com.safetynet.safetynetalerts.repository.PersonRepository;
 import com.safetynet.safetynetalerts.util.AgeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ public class ChildAlertService implements IChildAlertService {
     private final PersonRepository personRepository;
     private final MedicalRecordRepository medicalRecordRepository;
 
-    @Autowired
     public ChildAlertService(PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository) {
         this.personRepository = personRepository;
         this.medicalRecordRepository = medicalRecordRepository;
@@ -33,11 +32,15 @@ public class ChildAlertService implements IChildAlertService {
     @Override
     public ChildAlertDTO getChildAlertInfo(String address) {
         if (address == null || address.trim().isEmpty()) {
-            throw new IllegalArgumentException("L'adresse ne peut pas être nulle ou vide");
+            throw new NotFoundException("L'adresse ne peut pas être nulle ou vide");
         }
         List<Person> persons = personRepository.findByAddress(address);
         List<ChildAlertInfo> childrenInfo = new ArrayList<>();
         List<String> householdMembers = new ArrayList<>();
+
+        if (persons.isEmpty()) {
+            throw new NotFoundException("Cette adresse n'existe pas, veuillez réessayer !");
+        }
 
         for (Person person : persons) {
             MedicalRecord medicalRecord = medicalRecordRepository.findByFirstNameAndLastName(person.getFirstName(), person.getLastName()).orElse(null);

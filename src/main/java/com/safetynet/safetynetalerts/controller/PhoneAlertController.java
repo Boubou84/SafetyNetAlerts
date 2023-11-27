@@ -1,7 +1,6 @@
 package com.safetynet.safetynetalerts.controller;
 
 import com.safetynet.safetynetalerts.interfaces.IPhoneAlertService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,6 @@ public class PhoneAlertController {
 
     private IPhoneAlertService phoneAlertService;
 
-    @Autowired
     public PhoneAlertController(IPhoneAlertService phoneAlertService) {
         this.phoneAlertService = phoneAlertService;
     }
@@ -34,5 +32,4 @@ public class PhoneAlertController {
         }
         return new ResponseEntity<>(phoneNumbers, HttpStatus.OK);
     }
-
 }

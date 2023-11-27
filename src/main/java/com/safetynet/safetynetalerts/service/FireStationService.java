@@ -4,6 +4,8 @@ import com.safetynet.safetynetalerts.DTO.FireResponse;
 import com.safetynet.safetynetalerts.DTO.FireStationCoverageDTO;
 import com.safetynet.safetynetalerts.DTO.PersonDetails;
 import com.safetynet.safetynetalerts.DTO.PersonFireStationDTO;
+import com.safetynet.safetynetalerts.exception.AlreadyExistException;
+import com.safetynet.safetynetalerts.exception.NotFoundException;
 import com.safetynet.safetynetalerts.interfaces.IFireStationService;
 import com.safetynet.safetynetalerts.model.FireStation;
 import com.safetynet.safetynetalerts.model.MedicalRecord;
@@ -15,14 +17,12 @@ import com.safetynet.safetynetalerts.repository.RootRepository;
 import com.safetynet.safetynetalerts.util.AgeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service pour gérer les fonctionnalités liées aux stations de pompiers.
@@ -37,7 +37,6 @@ public class FireStationService implements IFireStationService {
     private final MedicalRecordRepository medicalRecordRepository;
     private final RootRepository rootRepository;
 
-    @Autowired
     public FireStationService(PersonRepository personRepository, FireStationRepository fireStationRepository, MedicalRecordRepository medicalRecordRepository, RootRepository rootRepository) {
         this.personRepository = personRepository;
         this.fireStationRepository = fireStationRepository;
@@ -50,15 +49,24 @@ public class FireStationService implements IFireStationService {
     @Override
     public FireResponse getFireDetailsByAddress(String address) {
         if (address == null || address.trim().isEmpty()) {
-            throw new IllegalArgumentException("L'adresse ne peut pas être nulle ou vide");
+            throw new NotFoundException("L'adresse ne peut pas être nulle ou vide");
         }
         List<Person> personsAddress = personRepository.findByAddress(address);
         Optional<FireStation> fireStation = fireStationRepository.findFireStationByAddress(address);
 
+        if (personsAddress.isEmpty()) {
+            throw new NotFoundException("Cette adresse n'existe pas, veuillez réessayer !");
+        }
+
         List<PersonDetails> personDetailsList = personsAddress.stream().map(p -> {
             PersonDetails details = new PersonDetails();
-            details.setFirstName(p.getFirstName() + " " + p.getLastName());
+            details.setFirstName(p.getFirstName());
+            details.setLastName(p.getLastName());
             details.setPhone(p.getPhone());
+            details.setAddress(address);
+            details.setCity(p.getCity());
+            details.setZip(p.getZip());
+            details.setEmail(p.getEmail());
             MedicalRecord medicalRecord = medicalRecordRepository.findByFirstNameAndLastName(p.getFirstName(), p.getLastName()).orElse(null);
 
             if (medicalRecord != null) {
@@ -67,7 +75,7 @@ public class FireStationService implements IFireStationService {
                 details.setAllergies(medicalRecord.getAllergies());
             }
             return details;
-        }).collect(Collectors.toList());
+        }).toList();
 
         FireResponse response = new FireResponse();
         response.setPersons(personDetailsList);
@@ -77,39 +85,15 @@ public class FireStationService implements IFireStationService {
     }
 
     @Override
-    public FireStationCoverageDTO getFireStationCoverage(int stationNumber) throws IOException {
-        Optional<FireStation> fireStations = fireStationRepository.findFireStationByAddress(String.valueOf(stationNumber));
-
-        if (fireStations.isEmpty()) {
-            return new FireStationCoverageDTO(new ArrayList<>(), 0, 0);
-        }
-
-        List<String> addresses = fireStations.stream()
-                .map(FireStation::getAddress)
-                .collect(Collectors.toList());
-
-        List<Person> persons = rootRepository.getRoot().getPersons().stream()
-                .filter(p -> addresses.contains(p.getAddress()))
-                .collect(Collectors.toList());
-
-        List<PersonFireStationDTO> personDTOs = persons.stream()
-                .map(p -> new PersonFireStationDTO(p.getFirstName(), p.getLastName(), p.getAddress(), p.getPhone()))
-                .collect(Collectors.toList());
-
-        long adultsCount = persons.stream()
-                .filter(p -> {
-                    MedicalRecord medicalRecord = medicalRecordRepository.findByFirstNameAndLastName(p.getFirstName(), p.getLastName()).orElse(null);
-                    return medicalRecord != null && AgeUtil.calculateAge(medicalRecord.getBirthdate()) > 18;
-                })
-                .count();
-
-        long childrenCount = persons.size() - adultsCount;
-
-        return new FireStationCoverageDTO(personDTOs, (int) adultsCount, (int) childrenCount);
-    }
-    @Override
     public FireStationCoverageDTO getPersonsCoveredByStation(int station) throws IOException {
+        if (station <= 0) {
+            throw new NotFoundException("Le numéro de la station ne peut pas être null ou négatif.");
+        }
         List<Person> persons = personRepository.findPersonsByStationNumber(station);
+
+        if (persons == null || persons.isEmpty()) {
+            throw new NotFoundException("Aucune personne trouvée pour la station numéro " + station);
+        }
 
         List<PersonFireStationDTO> personsDTO = new ArrayList<>();
         int adults = 0;
@@ -139,13 +123,18 @@ public class FireStationService implements IFireStationService {
     }
 
     public FireStation addFireStation(FireStation fireStation) {
+        if (fireStationRepository.findFireStationByAddress(fireStation.getAddress()).isPresent()) {
+            throw new AlreadyExistException("La station de pompiers existe déjà à l'adresse spécifiée.");
+        }
         fireStationRepository.addFireStation(fireStation);
+
         return fireStation;
     }
 
     public FireStation updateFireStation(FireStation fireStation) {
         fireStationRepository.updateFireStation(fireStation);
-        return fireStation;
+        return fireStationRepository.findFireStationByAddress(fireStation.getAddress())
+                .orElseThrow(() -> new NotFoundException("Station non trouvée"));
     }
 
     public void deleteFireStation(String address) {

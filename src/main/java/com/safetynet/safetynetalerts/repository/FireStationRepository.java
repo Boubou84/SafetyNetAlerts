@@ -1,16 +1,15 @@
 package com.safetynet.safetynetalerts.repository;
 
+import com.safetynet.safetynetalerts.exception.NotFoundException;
 import com.safetynet.safetynetalerts.model.FireStation;
 import com.safetynet.safetynetalerts.model.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Référentiel pour gérer les opérations liées aux données des stations de pompiers.
@@ -22,11 +21,10 @@ public class FireStationRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(FireStationRepository.class);
 
-    private RootRepository rootRepository;
+    private final RootRepository rootRepository;
 
     private List<FireStation> firestations;
 
-    @Autowired
     public FireStationRepository(RootRepository rootRepository) {
         this.rootRepository = rootRepository;
         initializeFireStations();
@@ -49,8 +47,9 @@ public class FireStationRepository {
         return rootRepository.getRoot().getFireStations().stream()
                 .filter(fireStation -> stationNumbers.contains(fireStation.getStation()))
                 .map(FireStation::getAddress)
-                .collect(Collectors.toList());
+                .toList();
     }
+
     public Optional<FireStation> findFireStationByAddress(String address) {
         return getFireStations().stream()
                 .filter(fs -> fs.getAddress().equalsIgnoreCase(address))
@@ -58,9 +57,13 @@ public class FireStationRepository {
     }
 
     public void addFireStation(FireStation fireStation) {
-        if (fireStation == null) {
-            logger.error("La tentative d'ajout d'une station de pompiers nulle a été détectée");
-            throw new IllegalArgumentException("La station de pompiers ne peut pas être null");
+        if (fireStation.getAddress() == null || fireStation.getAddress().trim().isEmpty()){
+            throw new NotFoundException("L'adresse ne peux pas être null !");
+        }
+
+        if (fireStation.getStation() <= 0) {
+            logger.error("La tentative d'ajout d'une station de pompiers avec un numéro de station invalide a été détectée");
+            throw new NotFoundException("Le numéro de la station de pompiers doit être positif et non nul");
         }
 
         firestations.add(fireStation);
@@ -76,7 +79,7 @@ public class FireStationRepository {
             updateRoot();
             logger.info("Station de pompiers mise à jour avec succès : {}", firestation);
         } else {
-            throw new IllegalArgumentException("La station de pompiers n'existe pas");
+            throw new NotFoundException("La station de pompiers n'existe pas");
         }
     }
 
@@ -87,10 +90,9 @@ public class FireStationRepository {
             updateRoot();
             logger.info("Station de pompiers supprimée avec succès pour : {}", address);
         } else {
-            throw new IllegalArgumentException("La station de pompiers n'existe pas");
+            throw new NotFoundException("La station de pompiers n'existe pas");
         }
     }
-
 
     private void updateRoot() {
         try {

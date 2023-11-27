@@ -16,16 +16,13 @@ public class PersonDetails {
     private String city;
     private int zip;
     private String email;
-    private String birthdate;
     private List<String> medications;
     private List<String> allergies;
-    private int station;
-    private String fireStationAddress;
 
     public PersonDetails() {
     }
 
-    public PersonDetails(String firstName, String lastName, String phone, int age,  String address, String city, int zip, String email, String birthdate, List<String> medications, List<String> allergies, int station, String fireStationAddress) {
+    public PersonDetails(String firstName, String lastName, String phone, int age,  String address, String city, int zip, String email, List<String> medications, List<String> allergies) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -34,11 +31,8 @@ public class PersonDetails {
         this.city = city;
         this.zip = zip;
         this.email = email;
-        this.birthdate = birthdate;
         this.medications = medications;
         this.allergies = allergies;
-        this.station = station;
-        this.fireStationAddress = fireStationAddress;
     }
 
     public String getFirstName() {
@@ -105,13 +99,6 @@ public class PersonDetails {
         this.email = email;
     }
 
-    public String getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
-    }
 
     public List<String> getMedications() {
         return medications;
@@ -129,20 +116,5 @@ public class PersonDetails {
         this.allergies = allergies;
     }
 
-    public int getStation() {
-        return station;
     }
-
-    public void setStation(int station) {
-        this.station = station;
-    }
-
-    public String getFireStationAddress() {
-        return fireStationAddress;
-    }
-
-    public void setFireStationAddress(String fireStationAddress) {
-        this.fireStationAddress = fireStationAddress;
-    }
-}
 

@@ -4,7 +4,6 @@ import com.safetynet.safetynetalerts.DTO.Residence;
 import com.safetynet.safetynetalerts.interfaces.IResidenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +24,11 @@ public class ResidenceController {
 
     private final Logger logger = LoggerFactory.getLogger(PersonController.class);
 
-    @Autowired
     private IResidenceService residenceService;
+
+    public ResidenceController(IResidenceService residenceService) {
+        this.residenceService = residenceService;
+    }
 
     @GetMapping("/stations")
     public ResponseEntity<List<Residence>> getResidencesByStations(@RequestParam("stations") List<Integer> stationNumbers) throws IOException {

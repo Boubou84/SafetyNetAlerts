@@ -11,7 +11,6 @@ public class PersonInfo {
     private MedicalRecord medicalRecord;
     private int age;
 
-
     public PersonInfo() {
     }
 
@@ -20,7 +19,6 @@ public class PersonInfo {
         this.medicalRecord = medicalRecord;
         this.age = age;
     }
-
 
     public Person getPerson() {
         return person;

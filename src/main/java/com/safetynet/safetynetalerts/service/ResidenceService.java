@@ -10,7 +10,6 @@ import com.safetynet.safetynetalerts.repository.MedicalRecordRepository;
 import com.safetynet.safetynetalerts.repository.PersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -35,15 +34,10 @@ public class ResidenceService implements IResidenceService {
 
     private final MedicalRecordRepository medicalRecordRepository;
 
-    @Autowired
     public ResidenceService(FireStationRepository fireStationRepository, PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository) {
         this.fireStationRepository = fireStationRepository;
         this.personRepository = personRepository;
         this.medicalRecordRepository = medicalRecordRepository;
-    }
-
-    public Residence getResidenceInfo(String address) {
-        return getResidenceByAddress(address);
     }
 
     @Override

@@ -2,19 +2,22 @@ package com.safetynet.safetynetalerts.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.safetynetalerts.error.CustomErrorType;
+import com.safetynet.safetynetalerts.exception.AlreadyExistException;
+import com.safetynet.safetynetalerts.exception.NotFoundException;
 import com.safetynet.safetynetalerts.interfaces.IPersonService;
-import com.safetynet.safetynetalerts.model.*;
+import com.safetynet.safetynetalerts.model.MedicalRecord;
+import com.safetynet.safetynetalerts.model.Person;
+import com.safetynet.safetynetalerts.model.PersonInfo;
+import com.safetynet.safetynetalerts.model.Root;
 import com.safetynet.safetynetalerts.repository.FireStationRepository;
 import com.safetynet.safetynetalerts.repository.MedicalRecordRepository;
 import com.safetynet.safetynetalerts.repository.PersonRepository;
 import com.safetynet.safetynetalerts.repository.RootRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,7 +37,6 @@ public class PersonService implements IPersonService {
     private final ObjectMapper objectMapper;
     private final FireStationRepository fireStationRepository;
 
-    @Autowired
     public PersonService(RootRepository rootRepository, PersonRepository personRepository,
                          MedicalRecordRepository medicalRecordRepository,
                          ObjectMapper objectMapper,
@@ -65,25 +67,30 @@ public class PersonService implements IPersonService {
     @Override
     public PersonInfo getPersonInfoByFirstNameAndLastName(String firstName, String lastName) {
         Person person = personRepository.findByFirstNameAndLastName(firstName, lastName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Personne non trouvée"));
+                .orElseThrow(() -> new NotFoundException("Personne non trouvée avec le prénom " + firstName + " et le nom de famille " + lastName));
 
         MedicalRecord medicalRecord = medicalRecordRepository.findByFirstNameAndLastName(firstName, lastName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dossier médical non trouvé"));
-
+                .orElseThrow(() -> new NotFoundException("Dossier médical non trouvé pour " + firstName + " " + lastName));
         return new PersonInfo(person, medicalRecord, calculateAge(medicalRecord.getBirthdate()));
     }
 
     @Override
     public List<String> getEmailsByCity(String city) {
-        return personRepository.findPersons(null, null, city, null)
+        if (city == null || city.trim().isEmpty()) {
+            throw new NotFoundException("La ville ne peut pas être nulle ou vide");
+        }
+        List<String> emails = personRepository.findPersons(null, null, city, null)
                 .stream()
                 .map(Person::getEmail)
                 .collect(Collectors.toList());
-    }
-    public Person addPerson(Person newPerson) throws IOException {
-        if (newPerson == null || newPerson.getFirstName().trim().isEmpty() || newPerson.getLastName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Les données de la personne sont invalides.");
+
+        if (emails.isEmpty()) {
+            throw new NotFoundException("Cette ville n'existe pas, veuillez réessayer !");
         }
+        return emails;
+    }
+
+    public Person addPerson(Person newPerson) throws IOException {
 
         Root root = rootRepository.getRoot();
         List<Person> persons = root.getPersons();
@@ -93,7 +100,7 @@ public class PersonService implements IPersonService {
                         && p.getLastName().equalsIgnoreCase(newPerson.getLastName()));
 
         if (exists) {
-            throw new IllegalArgumentException("La personne existe déjà.");
+            throw new AlreadyExistException("La personne existe déjà.");
         }
 
         personRepository.addPerson(newPerson);
@@ -102,54 +109,29 @@ public class PersonService implements IPersonService {
 
     public Person updatePerson(String oldFirstName, String oldLastName, Person updatedPerson) throws IOException {
         if (updatedPerson == null || updatedPerson.getFirstName().trim().isEmpty() || updatedPerson.getLastName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Les données de la personne sont invalides.");
+            throw new NotFoundException("Le prénom et le nom de la personne sont obligatoires.");
         }
+
+        if (oldFirstName == null || oldFirstName.trim().isEmpty() || oldLastName == null || oldLastName.trim().isEmpty()) {
+            throw new NotFoundException("Le prénom et le nom actuels de la personne sont obligatoires pour la mise à jour.");
+        }
+
+        return personRepository.updatePerson(oldFirstName, oldLastName, updatedPerson);
+    }
+
+    public void deletePerson(String firstName, String lastName) throws IOException {
 
         Root root = rootRepository.getRoot();
         List<Person> persons = root.getPersons();
-
-        Optional<Person> personOptional = persons.stream()
-                .filter(p -> p.getFirstName().equals(oldFirstName) && p.getLastName().equals(oldLastName))
+        Optional<Person> personToDelete = persons.stream()
+                .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
                 .findFirst();
-
-        if (!personOptional.isPresent()) {
-            throw new IllegalArgumentException("La personne à mettre à jour n'existe pas.");
+        if (personToDelete.isEmpty()) {
+            throw new NotFoundException("Personne non trouvée");
         }
-
-        Person existingPerson = personOptional.get();
-        existingPerson.setFirstName(updatedPerson.getFirstName());
-        existingPerson.setLastName(updatedPerson.getLastName());
-
+        persons.remove(personToDelete.get());
         rootRepository.write(root);
-        return existingPerson;
-    }
-
-
-    public boolean deletePerson(String firstName, String lastName) throws IOException {
-        try {
-            Root root = rootRepository.getRoot();
-            List<Person> persons = root.getPersons();
-            Optional<Person> personToDelete = persons.stream()
-                    .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
-                    .findFirst();
-
-            persons.remove(personToDelete.get());
-            rootRepository.write(root);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return personRepository.deletePerson(firstName, lastName);
-    }
-
-            private void serializeAndLogError(Person person, FireStation fireStation, MedicalRecord medicalRecord) {
-        try {
-            objectMapper.writeValueAsString(person);
-            objectMapper.writeValueAsString(fireStation);
-            objectMapper.writeValueAsString(medicalRecord);
-        } catch (Exception e) {
-            logger.error("Erreur de sérialisation JSON", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur de sérialisation JSON", e);
-        }
+        personRepository.deletePerson(firstName, lastName);
     }
 }
 

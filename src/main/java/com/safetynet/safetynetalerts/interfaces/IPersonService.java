@@ -21,5 +21,5 @@ public interface IPersonService {
 
     Person updatePerson(String oldFirstName, String oldLastName, Person updatedPerson) throws IOException;
 
-    public boolean deletePerson(String firstName, String lastName) throws IOException;
+    void deletePerson(String firstName, String lastName) throws IOException;
 }
