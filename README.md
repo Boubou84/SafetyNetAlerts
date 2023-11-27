@@ -1,6 +1,6 @@
 # SafetyNetAlerts
 
-SafetyNet Alerts est une application back-end destinée à fournir des informations essentielles aux services d'urgence. Elle permet de gérer et d'accéder facilement aux informations sur les personnes, les casernes de pompiers et les dossiers médicaux.
+SafetyNet Alerts est une application back-end destinée à fournir des informations essentielles aux services d'urgence. Elle permet de gérer et d'accéder facilement aux informations sur les personnes, les casernes de pompiers et les dossiers médicaux du fichier Json.
 
 ## Caractéristiques
 
