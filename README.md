@@ -48,8 +48,11 @@ L'application expose une API REST que vous pouvez interroger à l'aide de requê
 Exemples d'Endpoints :
 
 GET /personInfo : retourne les informations d'une personne avec le prénom {} et le nom de famille {}.
+
 POST /person : ajoute une nouvelle personne.
+
 PUT person/{oldFirstName}/{oldLastName} : met à jour les informations d'une personne.
+
 DELETE /person/{firstName}/{lastName} : supprime une personne.
 
 Contribution
