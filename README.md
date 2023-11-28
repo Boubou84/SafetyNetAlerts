@@ -16,7 +16,8 @@ SafetyNet Alerts est une application back-end destinée à fournir des informati
 
 ## Configuration et Installation
 
-Configuration du Fichier JSON
+Configuration du Fichier JSON :
+
 Le fichier JSON utilisé pour la persistance des données doit être placé dans le répertoire src/main/resources. 
 Le chemin d'accès au fichier peut être configuré dans le fichier application.properties ou application.yml de votre projet.
 
