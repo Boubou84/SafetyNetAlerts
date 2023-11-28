@@ -4,10 +4,12 @@ SafetyNet Alerts est une application back-end destinée à fournir des informati
 
 ## Caractéristiques
 
-- Gestion des informations sur les résidents, casernes de pompiers et dossiers médicaux en utilisant un fichier JSON comme source de données.
+- Gestion des informations sur les résidents, casernes de pompiers et dossiers médicaux en utilisant un 
+  fichier `JSON` comme source de données.
 - Recherche et filtrage des données selon divers critères.
 - API REST pour une intégration facile avec d'autres systèmes ou applications front-end.
-- Manipulation des données de personnes, de casernes de pompiers et de dossiers médicaux directement depuis le fichier JSON.
+- Manipulation des données de personnes, de casernes de pompiers et de dossiers médicaux directement depuis 
+  le fichier `JSON`.
 
 ## Technologies Utilisées
 
@@ -16,10 +18,10 @@ SafetyNet Alerts est une application back-end destinée à fournir des informati
 
 ## Configuration et Installation
 
-Configuration du Fichier JSON :
+Configuration du Fichier `JSON` :
 
-Le fichier JSON utilisé pour la persistance des données doit être placé dans le répertoire src/main/resources. 
-Le chemin d'accès au fichier peut être configuré dans le fichier application.properties ou application.yml de votre projet.
+Le fichier `JSON` utilisé pour la persistance des données doit être placé dans le répertoire src/main/resources. 
+Le chemin d'accès au fichier peut être configuré dans le fichier `application.properties` ou `application.yml` de votre projet.
 
 ### Prérequis
 
@@ -35,11 +37,11 @@ Le chemin d'accès au fichier peut être configuré dans le fichier application.
 
 1. Cloner le dépôt Git :  git clone (https://github.com/Boubou84/SafetyNetAlerts.git)
    
-2. Naviguer dans le dossier du projet via le terminal : cd safetynetalerts
+2. Naviguer dans le dossier du projet via le terminal : `cd safetynetalerts`
 
-3. Construire le projet avec Maven : mvn clean install
+3. Construire le projet avec Maven : `mvn clean install`
 
-4. Exécuter l'application : mvn spring-boot:run
+4. Exécuter l'application : `mvn spring-boot:run`
 
 #### Utilisation
 
@@ -47,22 +49,26 @@ L'application expose une API REST que vous pouvez interroger à l'aide de requê
 
 Exemples d'Endpoints :
 
-GET /personInfo : retourne les informations d'une personne avec le prénom {} et le nom de famille {}.
+`GET /personInfo` : Retourne les informations d'une personne avec le prénom {} et le nom de famille {}.
 
-POST /person : ajoute une nouvelle personne.
+`POST /person` : Ajoute une nouvelle personne.
 
-PUT person/{oldFirstName}/{oldLastName} : met à jour les informations d'une personne.
+`PUT person/{oldFirstName}/{oldLastName}` : Met à jour les informations d'une personne.
 
-DELETE /person/{firstName}/{lastName} : supprime une personne.
+`DELETE /person/{firstName}/{lastName}` : Supprime une personne.
 
 Contribution
 
 Les contributions à ce projet sont les bienvenues. Si vous souhaitez contribuer, veuillez suivre les étapes suivantes :
 
-1. **Forker le dépôt** : Créez une copie de ce dépôt dans votre espace GitHub.
-2. **Créer une nouvelle branche** : Utilisez la commande `git checkout -b nomDeLaBranche` pour créer une nouvelle branche pour vos modifications.
-3. **Commiter vos changements** : Après avoir apporté vos modifications, enregistrez-les avec `git commit -m 'message'`.
+1. **Forker le dépôt** : Créez une copie de ce dépôt dans votre espace `GitHub`.
+
+2. **Créer une nouvelle branche** : Utilisez la commande `git checkout -b nomDeLaBranche` pour créer une         nouvelle branche pour vos modifications.
+   
+3. **Commiter vos changements** : Après avoir apporté vos modifications, enregistrez-les avec `git commit -m    'message'`.
+   
 4. **Pusher dans la branche** : Envoyez vos modifications vers GitHub avec `git push origin nomDeLaBranche`.
-5. **Ouvrir une Pull Request** : Depuis votre fork sur GitHub, ouvrez une Pull Request pour proposer vos changements.
+   
+5. **Ouvrir une Pull Request** : Depuis votre fork sur GitHub, ouvrez une Pull Request pour proposer vos         changements.
 
 Merci pour votre contribution à l'amélioration de ce projet !
