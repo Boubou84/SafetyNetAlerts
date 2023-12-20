@@ -1,7 +1,7 @@
 package com.safetynet.safetynetalerts.service;
 
-import com.safetynet.safetynetalerts.DTO.InfoResidents;
-import com.safetynet.safetynetalerts.DTO.Residence;
+import com.safetynet.safetynetalerts.dto.InfoResidents;
+import com.safetynet.safetynetalerts.dto.Residence;
 import com.safetynet.safetynetalerts.model.MedicalRecord;
 import com.safetynet.safetynetalerts.model.Person;
 import com.safetynet.safetynetalerts.repository.FireStationRepository;

@@ -1,7 +1,7 @@
 package com.safetynet.safetynetalerts.controller;
 
-import com.safetynet.safetynetalerts.DTO.ChildAlertDTO;
-import com.safetynet.safetynetalerts.DTO.ChildAlertInfo;
+import com.safetynet.safetynetalerts.dto.ChildAlertDTO;
+import com.safetynet.safetynetalerts.dto.ChildAlertInfo;
 import com.safetynet.safetynetalerts.exception.NotFoundException;
 import com.safetynet.safetynetalerts.service.ChildAlertService;
 import org.junit.jupiter.api.BeforeEach;

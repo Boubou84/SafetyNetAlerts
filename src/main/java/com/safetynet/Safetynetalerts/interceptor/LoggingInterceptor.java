@@ -15,7 +15,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // Log avant le traitement de la requête
-        logger.info("Avant la requête: " + request.getMethod() + " " + request.getRequestURI());
+        logger.info("Avant la requête: " + request.getMethod() + " " + request.getRequestURI()+ " " + request.getQueryString());
         return true;
     }
 

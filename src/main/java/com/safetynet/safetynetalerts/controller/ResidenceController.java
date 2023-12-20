@@ -1,6 +1,6 @@
 package com.safetynet.safetynetalerts.controller;
 
-import com.safetynet.safetynetalerts.DTO.Residence;
+import com.safetynet.safetynetalerts.dto.Residence;
 import com.safetynet.safetynetalerts.interfaces.IResidenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/flood")
 public class ResidenceController {
 
-    private final Logger logger = LoggerFactory.getLogger(PersonController.class);
+    private final Logger logger = LoggerFactory.getLogger(ResidenceController.class);
 
     private IResidenceService residenceService;
 

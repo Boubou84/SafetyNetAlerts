@@ -1,7 +1,7 @@
 package com.safetynet.safetynetalerts.service;
 
-import com.safetynet.safetynetalerts.DTO.ChildAlertDTO;
-import com.safetynet.safetynetalerts.DTO.ChildAlertInfo;
+import com.safetynet.safetynetalerts.dto.ChildAlertDTO;
+import com.safetynet.safetynetalerts.dto.ChildAlertInfo;
 import com.safetynet.safetynetalerts.exception.NotFoundException;
 import com.safetynet.safetynetalerts.interfaces.IChildAlertService;
 import com.safetynet.safetynetalerts.model.MedicalRecord;

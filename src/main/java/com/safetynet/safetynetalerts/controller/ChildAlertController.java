@@ -1,6 +1,6 @@
 package com.safetynet.safetynetalerts.controller;
 
-import com.safetynet.safetynetalerts.DTO.ChildAlertDTO;
+import com.safetynet.safetynetalerts.dto.ChildAlertDTO;
 import com.safetynet.safetynetalerts.interfaces.IChildAlertService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

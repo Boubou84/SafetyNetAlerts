@@ -1,10 +1,10 @@
 package com.safetynet.safetynetalerts.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safetynet.safetynetalerts.DTO.FireResponse;
-import com.safetynet.safetynetalerts.DTO.FireStationCoverageDTO;
-import com.safetynet.safetynetalerts.DTO.PersonDetails;
-import com.safetynet.safetynetalerts.DTO.PersonFireStationDTO;
+import com.safetynet.safetynetalerts.dto.FireResponse;
+import com.safetynet.safetynetalerts.dto.FireStationCoverageDTO;
+import com.safetynet.safetynetalerts.dto.PersonDetails;
+import com.safetynet.safetynetalerts.dto.PersonFireStationDTO;
 import com.safetynet.safetynetalerts.interfaces.IFireStationService;
 import com.safetynet.safetynetalerts.model.FireStation;
 import org.junit.jupiter.api.BeforeEach;

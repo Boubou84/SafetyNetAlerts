@@ -1,9 +1,9 @@
 package com.safetynet.safetynetalerts.service;
 
-import com.safetynet.safetynetalerts.DTO.FireResponse;
-import com.safetynet.safetynetalerts.DTO.FireStationCoverageDTO;
-import com.safetynet.safetynetalerts.DTO.PersonDetails;
-import com.safetynet.safetynetalerts.DTO.PersonFireStationDTO;
+import com.safetynet.safetynetalerts.dto.FireResponse;
+import com.safetynet.safetynetalerts.dto.FireStationCoverageDTO;
+import com.safetynet.safetynetalerts.dto.PersonDetails;
+import com.safetynet.safetynetalerts.dto.PersonFireStationDTO;
 import com.safetynet.safetynetalerts.exception.AlreadyExistException;
 import com.safetynet.safetynetalerts.exception.NotFoundException;
 import com.safetynet.safetynetalerts.interfaces.IFireStationService;

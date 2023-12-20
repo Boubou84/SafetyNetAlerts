@@ -1,6 +1,6 @@
 package com.safetynet.safetynetalerts.controller;
 
-import com.safetynet.safetynetalerts.DTO.Residence;
+import com.safetynet.safetynetalerts.dto.Residence;
 import com.safetynet.safetynetalerts.interfaces.IResidenceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

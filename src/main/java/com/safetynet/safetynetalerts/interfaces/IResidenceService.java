@@ -1,7 +1,7 @@
 package com.safetynet.safetynetalerts.interfaces;
 
-import com.safetynet.safetynetalerts.DTO.InfoResidents;
-import com.safetynet.safetynetalerts.DTO.Residence;
+import com.safetynet.safetynetalerts.dto.InfoResidents;
+import com.safetynet.safetynetalerts.dto.Residence;
 import com.safetynet.safetynetalerts.model.Person;
 
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package com.safetynet.safetynetalerts.controller;
 
-import com.safetynet.safetynetalerts.DTO.FireResponse;
-import com.safetynet.safetynetalerts.DTO.FireStationCoverageDTO;
+import com.safetynet.safetynetalerts.dto.FireResponse;
+import com.safetynet.safetynetalerts.dto.FireStationCoverageDTO;
 import com.safetynet.safetynetalerts.interfaces.IFireStationService;
 import com.safetynet.safetynetalerts.model.FireStation;
 import org.slf4j.Logger;

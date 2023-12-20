@@ -280,7 +280,7 @@ import static org.mockito.Mockito.*;
         // Appel de la méthode deletePerson
         personService.deletePerson("John", "Doe");
 
-        // Vérifier que la personne a été supprimée
+        // Vérifie que la personne a été supprimée
         verify(personRepository).deletePerson("John", "Doe");
     }
 
@@ -299,7 +299,7 @@ import static org.mockito.Mockito.*;
         // Appel de la méthode deletePerson
         personService.deletePerson("John", "Doe");
 
-        // Vérifier que la personne a été supprimée
+        // Vérifie que la personne a été supprimée
         verify(personRepository).deletePerson("John", "Doe");
     }
 

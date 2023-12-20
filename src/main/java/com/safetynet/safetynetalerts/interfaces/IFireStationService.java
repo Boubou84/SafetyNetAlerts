@@ -1,7 +1,7 @@
 package com.safetynet.safetynetalerts.interfaces;
 
-import com.safetynet.safetynetalerts.DTO.FireResponse;
-import com.safetynet.safetynetalerts.DTO.FireStationCoverageDTO;
+import com.safetynet.safetynetalerts.dto.FireResponse;
+import com.safetynet.safetynetalerts.dto.FireStationCoverageDTO;
 import com.safetynet.safetynetalerts.model.FireStation;
 
 import java.io.IOException;

@@ -35,7 +35,7 @@ import java.util.List;
                 return new ResponseEntity<>(personInfo, HttpStatus.OK);
             } else {
                 logger.warn("Personne non trouvée avec le prénom {} et le nom {}", firstName, lastName);
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.OK);
             }
     }
 
